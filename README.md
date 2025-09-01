@@ -1,73 +1,175 @@
-# Welcome to your Lovable project
+# 🤖 Sura AI – AI Chat Application
 
-## Project info
+![GitHub Repo stars](https://img.shields.io/github/stars/suragms/SuraAi?style=flat&logo=github)
+![GitHub last commit](https://img.shields.io/github/last-commit/suragms/SuraAi)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Status](https://img.shields.io/badge/Status-Active-success.svg)
+![Tech Stack](https://img.shields.io/badge/Tech%20Stack-React%20%7C%20TypeScript%20%7C%20Vite-blue)
 
-**URL**: https://lovable.dev/projects/dd3129e2-3464-42ca-976c-12d66d879fbf
+> A modern, responsive **AI chat application** built using **React**, **TypeScript**, and **Vite**, delivering a clean, accessible, and beautiful interface to interact with AI models.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✨ Features
+- **Modern Chat Interface** – Real-time messaging with a minimal and elegant UI.  
+- **TypeScript Powered** – Strong typing ensures reliability and maintainability.  
+- **shadcn/ui Components** – For a consistent and professional design system.  
+- **Dark/Light Theme** – Dynamic theme switching with `next-themes`.  
+- **Responsive Design** – Optimized for desktop, tablet, and mobile devices.  
+- **Form Validation** – Integrated `react-hook-form` and `zod` for robust validation.  
+- **State Management** – Fast and efficient data handling with TanStack Query.  
+- **Smooth Navigation** – Powered by React Router DOM.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/dd3129e2-3464-42ca-976c-12d66d879fbf) and start prompting.
+## 🛠 Tech Stack
+- **Framework:** React 18 + TypeScript  
+- **Build Tool:** Vite  
+- **Styling:** Tailwind CSS + shadcn/ui  
+- **UI Primitives:** Radix UI  
+- **State Management:** TanStack Query (React Query)  
+- **Forms:** React Hook Form + Zod  
+- **Icons:** Lucide React  
+- **Charts & Visuals:** Recharts  
+- **Notifications:** Sonner  
+- **Linting:** ESLint (TypeScript rules)
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🚀 Installation & Setup
+### Prerequisites
+- Node.js 18+  
+- npm, yarn, or bun  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Setup
+```bash
+# Clone repository
+git clone https://github.com/suragms/SuraAi.git
+cd sura_ai
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Install dependencies
+npm install      # or yarn install or bun install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
+````
+
+Visit [http://localhost:5173](http://localhost:5173) to view the app.
+
+---
+
+## 📂 Project Structure
+
+```bash
+sura_ai/
+├── public/                 # Static assets
+├── src/
+│   ├── assets/             # Images, fonts, icons
+│   ├── components/         # Reusable UI components
+│   │   └── ui/             # shadcn/ui based components
+│   ├── hooks/              # Custom hooks
+│   ├── lib/                # Utilities & configs
+│   ├── pages/              # App pages
+│   │   ├── Landing.tsx
+│   │   ├── Index.tsx
+│   │   └── NotFound.tsx
+│   ├── App.tsx             # Root component
+│   ├── main.tsx            # Entry point
+│   └── index.css           # Global styles
+├── .env                    # Environment variables
+├── package.json            # Dependencies & scripts
+├── vite.config.ts          # Vite configuration
+├── tailwind.config.ts      # Tailwind configuration
+├── tsconfig.json           # TypeScript configuration
+└── README.md               # Project documentation
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🎯 Scripts
 
-**Use GitHub Codespaces**
+* `npm run dev` – Start development server
+* `npm run build` – Build for production
+* `npm run preview` – Preview production build
+* `npm run lint` – Run ESLint checks
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## ⚙️ Configuration
 
-This project is built with:
+Create a `.env` file in the project root:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```env
+VITE_API_URL=your_api_endpoint
+VITE_APP_NAME=Sura AI
+```
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/dd3129e2-3464-42ca-976c-12d66d879fbf) and click on Share -> Publish.
+## 🌐 Deployment
 
-## Can I connect a custom domain to my Lovable project?
+### Production Build
 
-Yes, you can!
+```bash
+npm run build
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Output files will be generated in `dist/`.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Hosting Options
+
+* **Vercel** (Recommended)
+* **Netlify** – Build command: `npm run build` & publish `dist/`
+* **GitHub Pages** – via GitHub Actions
+* **Static Hosting** – Upload `dist/` to any hosting provider
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a new branch:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. Commit your changes:
+
+   ```bash
+   git commit -m "Add new feature"
+   ```
+4. Push your branch:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the **MIT License** – see [LICENSE](LICENSE) for details.
+
+---
+
+## 📫 Contact
+
+**Developed by [Surag](https://linktr.ee/suragdevstudio) – Founder of Surag Dev Studio**
+
+* **LinkedIn**: [linkedin.com/in/suragsunil](https://linkedin.com/in/suragsunil)
+* **GitHub**: [github.com/suragms](https://github.com/suragms)
+* **Instagram**: [instagram.com/surag\_sunil](https://instagram.com/surag_sunil)
+* **Email**: [officialsurag@gmail.com](mailto:officialsurag@gmail.com)
+* **Location**: Kerala, India
+
+---
+
+### 🌟 Live Website
+
+> **Coming Soon** – Services are now available.
+> Reach out via the platforms above for early access!
+
+---
+
+```
