@@ -5,6 +5,7 @@ import { Sidebar } from '@/components/Sidebar';
 import { Menu, Sparkles, X } from 'lucide-react';
 import suraLogo from '@/assets/sura-ai-logo.png';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Chat {
   id: string;
@@ -14,7 +15,8 @@ interface Chat {
 
 const Index = () => {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile); // Closed by default on mobile, open on desktop
   const [chats, setChats] = useState<Chat[]>([
     {
       id: '1',
@@ -64,18 +66,23 @@ const Index = () => {
 
   const currentChat = chats.find(chat => chat.id === currentChatId);
 
+  // Update sidebar state when screen size changes
+  useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
+
   // Close sidebar on mobile when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (window.innerWidth <= 768 && sidebarOpen && !target.closest('.sidebar')) {
+      if (isMobile && sidebarOpen && !target.closest('.sidebar')) {
         setSidebarOpen(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [sidebarOpen]);
+  }, [sidebarOpen, isMobile]);
 
   return (
     <div className="h-screen flex bg-background">
