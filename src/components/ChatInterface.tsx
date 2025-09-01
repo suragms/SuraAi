@@ -4,9 +4,10 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
-import { Send, User, Bot, Sparkles } from 'lucide-react';
+import { Send, User, Bot, Sparkles, Loader2 } from 'lucide-react';
 import suraLogo from '@/assets/sura-ai-logo.png';
 import { toast } from '@/components/ui/sonner';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Message {
   id: string;
@@ -21,6 +22,7 @@ interface ChatInterfaceProps {
 }
 
 export const ChatInterface = ({ chatId, onUpdateChatTitle }: ChatInterfaceProps) => {
+  const isMobile = useIsMobile();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -147,37 +149,44 @@ export const ChatInterface = ({ chatId, onUpdateChatTitle }: ChatInterfaceProps)
 
   return (
     <div className="flex flex-col h-full bg-gradient-subtle">
-      {/* Header */}
-      <div className="sticky top-0 z-10 border-b border-transparent bg-transparent">
+      {/* Professional Header */}
+      <div className={`sticky top-0 z-10 border-b border-border/20 bg-card/80 backdrop-blur-sm ${
+        isMobile ? 'mobile-chat-header' : ''
+      }`}>
         <div className="flex items-center justify-center px-4 py-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div className="relative">
               <img 
                 src={suraLogo} 
                 alt="Sura AI" 
-                className="h-6 w-6 rounded-sm shadow-sm"
+                className={`rounded-lg shadow-sm ${isMobile ? 'h-8 w-8 mobile-avatar' : 'h-8 w-8'}`}
               />
-              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
             </div>
             <div className="text-center">
-              <h2 className="font-semibold text-sm text-blue-600">Sura AI</h2>
-              <p className="text-xs text-gray-500 font-medium">Surag Artificial Intelligence</p>
-              <p className="text-xs text-gray-400">Powered by Gemini API Key</p>
+              <h2 className="font-semibold text-sm text-foreground">Sura AI</h2>
+              <p className="text-xs text-muted-foreground font-medium">Professional Assistant</p>
+              <div className="flex items-center justify-center gap-1 mt-0.5">
+                <Sparkles className="h-3 w-3 text-primary" />
+                <span className="text-xs text-primary font-medium">AI Powered</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-
-
       {/* Messages */}
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
-        <div className="max-w-3xl mx-auto space-y-4">
+      <ScrollArea ref={scrollAreaRef} className={`flex-1 ${isMobile ? 'px-3 chat-scroll-area' : 'px-4'}`}>
+        <div className={`mx-auto space-y-4 ${isMobile ? 'max-w-full' : 'max-w-3xl'}`}>
           {messages.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium mb-2">Start a new conversation</p>
-              <p className="text-sm">Ask me anything and I'll help you out!</p>
+            <div className="text-center py-12 text-muted-foreground">
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                <Bot className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-foreground">Start a conversation</h3>
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                Ask me anything and I'll help you with intelligent, context-aware responses.
+              </p>
             </div>
           ) : (
             messages.map((message) => (
@@ -188,34 +197,49 @@ export const ChatInterface = ({ chatId, onUpdateChatTitle }: ChatInterfaceProps)
                 }`}
               >
                 {message.sender === 'ai' && (
-                  <Avatar className="h-8 w-8 shadow-subtle">
+                  <Avatar className={`shadow-sm ${isMobile ? 'h-7 w-7 mobile-avatar' : 'h-8 w-8'}`}>
                     <AvatarImage src={suraLogo} alt="Sura AI" />
                     <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                      <Bot className="h-4 w-4" />
+                      <Bot className="h-3 w-3" />
                     </AvatarFallback>
                   </Avatar>
                 )}
                 
-                <Card className={`max-w-[80%] p-3 sm:p-4 rounded-2xl ${
+                <Card className={`${
+                  isMobile ? 'max-w-[85%] p-3 chat-message-bubble' : 'max-w-[80%] p-4'
+                } rounded-2xl ${
                   message.sender === 'user'
-                    ? 'bg-chat-user text-chat-user-foreground shadow-glow'
-                    : 'bg-chat-ai text-chat-ai-foreground shadow-subtle'
+                    ? 'bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg'
+                    : 'bg-card text-foreground shadow-sm border border-border/50'
                 }`}>
-                  <p className="text-sm sm:text-[0.95rem] leading-relaxed whitespace-pre-wrap">
+                  <p className={`leading-relaxed whitespace-pre-wrap ${
+                    isMobile ? 'text-sm mobile-text' : 'text-[0.95rem]'
+                  }`}>
                     {message.content}
                   </p>
-                  <span className="text-[10px] sm:text-xs opacity-70 mt-2 block">
-                    {message.timestamp.toLocaleTimeString([], { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}
-                  </span>
+                  <div className={`flex items-center gap-1 mt-2 ${
+                    message.sender === 'user' ? 'justify-end' : 'justify-start'
+                  }`}>
+                    <span className={`opacity-70 ${
+                      isMobile ? 'text-[10px]' : 'text-xs'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })}
+                    </span>
+                    {message.sender === 'ai' && (
+                      <Sparkles className={`text-primary ${
+                        isMobile ? 'h-3 w-3' : 'h-3 w-3'
+                      }`} />
+                    )}
+                  </div>
                 </Card>
 
                 {message.sender === 'user' && (
-                  <Avatar className="h-8 w-8 shadow-subtle">
+                  <Avatar className={`shadow-sm ${isMobile ? 'h-7 w-7 mobile-avatar' : 'h-8 w-8'}`}>
                     <AvatarFallback className="bg-secondary text-secondary-foreground">
-                      <User className="h-4 w-4" />
+                      <User className="h-3 w-3" />
                     </AvatarFallback>
                   </Avatar>
                 )}
@@ -225,17 +249,22 @@ export const ChatInterface = ({ chatId, onUpdateChatTitle }: ChatInterfaceProps)
           
           {isLoading && (
             <div className="flex gap-3 justify-start">
-              <Avatar className="h-8 w-8 shadow-subtle">
+              <Avatar className={`shadow-sm ${isMobile ? 'h-7 w-7 mobile-avatar' : 'h-8 w-8'}`}>
                 <AvatarImage src={suraLogo} alt="Sura AI" />
                 <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                  <Bot className="h-4 w-4" />
+                  <Bot className="h-3 w-3" />
                 </AvatarFallback>
               </Avatar>
-              <Card className="bg-chat-ai text-chat-ai-foreground shadow-subtle p-3 sm:p-4 rounded-2xl">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-primary/80 rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-primary/80 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-primary/80 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+              <Card className={`bg-card text-foreground shadow-sm border border-border/50 ${
+                isMobile ? 'p-3 chat-message-bubble' : 'p-4'
+              } rounded-2xl`}>
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 text-primary animate-spin" />
+                  <span className={`text-muted-foreground ${
+                    isMobile ? 'text-sm mobile-text' : 'text-base'
+                  }`}>
+                    Sura AI is thinking...
+                  </span>
                 </div>
               </Card>
             </div>
@@ -243,27 +272,50 @@ export const ChatInterface = ({ chatId, onUpdateChatTitle }: ChatInterfaceProps)
         </div>
       </ScrollArea>
 
-      {/* Input */}
-      <div className="p-4 border-t bg-card/50 backdrop-blur-sm">
-        <div className="max-w-3xl mx-auto flex gap-2">
+      {/* Professional Input */}
+      <div className={`border-t border-border/20 bg-card/80 backdrop-blur-sm ${
+        isMobile ? 'p-3' : 'p-4'
+      }`}>
+        <div className={`mx-auto flex gap-3 ${
+          isMobile ? 'max-w-full' : 'max-w-3xl'
+        }`}>
           <Input
             ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
-            className="flex-1 bg-chat-input/90 border-border/50 focus:border-primary transition-colors rounded-full px-4 h-11"
+            className={`flex-1 bg-background/90 border-border/50 focus:border-primary transition-all duration-200 rounded-full px-4 ${
+              isMobile ? 'h-12 text-sm chat-input-field mobile-touch-target' : 'h-11'
+            } shadow-sm`}
             disabled={isLoading}
           />
           <Button
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isLoading}
-            className="bg-gradient-primary hover:opacity-90 text-primary-foreground shadow-glow px-4 h-11 rounded-full"
+            className={`bg-gradient-primary hover:opacity-90 text-primary-foreground shadow-lg px-4 rounded-full transition-all duration-200 ${
+              isMobile ? 'h-12 w-12 p-0 mobile-send-button mobile-touch-target' : 'h-11'
+            }`}
           >
-            <Send className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Send</span>
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <Send className="h-4 w-4" />
+                {!isMobile && <span className="ml-1">Send</span>}
+              </>
+            )}
           </Button>
         </div>
+        
+        {/* Mobile-friendly tip */}
+        {isMobile && (
+          <div className="text-center mt-2">
+            <p className="text-xs text-muted-foreground">
+              Press Enter to send • Tap and hold for more options
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

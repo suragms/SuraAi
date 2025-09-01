@@ -4,25 +4,39 @@ const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean>(false)
+  const [isInitialized, setIsInitialized] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+      const mobile = window.innerWidth < MOBILE_BREAKPOINT
+      setIsMobile(mobile)
+      setIsInitialized(true)
     }
 
     // Check immediately
     checkMobile()
 
-    // Set up event listener
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
+    // Set up event listener for window resize
+    const handleResize = () => {
       checkMobile()
     }
     
-    mql.addEventListener("change", onChange)
+    window.addEventListener('resize', handleResize)
     
-    return () => mql.removeEventListener("change", onChange)
+    // Set up media query listener for more precise detection
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    const handleMediaQueryChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches)
+    }
+    
+    mql.addEventListener("change", handleMediaQueryChange)
+    
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      mql.removeEventListener("change", handleMediaQueryChange)
+    }
   }, [])
 
-  return isMobile
+  // Return false until we've determined the screen size to prevent hydration mismatches
+  return isInitialized ? isMobile : false
 }

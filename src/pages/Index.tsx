@@ -17,6 +17,7 @@ const Index = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false); // Start with closed sidebar
+  const [isInitialized, setIsInitialized] = useState(false);
   const [chats, setChats] = useState<Chat[]>([
     {
       id: '1',
@@ -32,6 +33,7 @@ const Index = () => {
     if (!isMobile) {
       setSidebarOpen(true);
     }
+    setIsInitialized(true);
   }, [isMobile]);
 
   // Manage body scroll when mobile sidebar is open
@@ -99,6 +101,18 @@ const Index = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [sidebarOpen, isMobile]);
+
+  // Show loading state while initializing
+  if (!isInitialized) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-8 h-8 mx-auto mb-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex bg-background">
