@@ -16,7 +16,7 @@ interface Chat {
 const Index = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile); // Closed by default on mobile, open on desktop
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Start with closed sidebar
   const [chats, setChats] = useState<Chat[]>([
     {
       id: '1',
@@ -25,6 +25,27 @@ const Index = () => {
     }
   ]);
   const [currentChatId, setCurrentChatId] = useState<string>('1');
+
+  // Initialize sidebar state based on screen size
+  useEffect(() => {
+    // Only set sidebar open on desktop, keep closed on mobile
+    if (!isMobile) {
+      setSidebarOpen(true);
+    }
+  }, [isMobile]);
+
+  // Manage body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      document.body.classList.add('sidebar-open');
+    } else {
+      document.body.classList.remove('sidebar-open');
+    }
+
+    return () => {
+      document.body.classList.remove('sidebar-open');
+    };
+  }, [isMobile, sidebarOpen]);
 
   const createNewChat = () => {
     const newChat: Chat = {
@@ -66,11 +87,6 @@ const Index = () => {
 
   const currentChat = chats.find(chat => chat.id === currentChatId);
 
-  // Update sidebar state when screen size changes
-  useEffect(() => {
-    setSidebarOpen(!isMobile);
-  }, [isMobile]);
-
   // Close sidebar on mobile when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -99,7 +115,7 @@ const Index = () => {
       />
       
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 main-content">
         {/* Top Bar */}
         <div className="sticky top-0 z-20 flex items-center justify-between p-4 border-b bg-card/70 backdrop-blur supports-[backdrop-filter]:bg-card/50">
           <div className="flex items-center gap-3">

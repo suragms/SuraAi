@@ -102,11 +102,11 @@ All colors MUST be HSL.
     --accent: 16 100% 66%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 50%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 230 13% 18%;
-    --input: 230 13% 18%;
+    --border: 230 13% 15%;
+    --input: 230 13% 15%;
     --ring: 262 83% 58%;
 
     /* Dark chat tokens */
@@ -142,6 +142,46 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Mobile-specific styles for sidebar */
+@layer components {
+  /* Prevent body scroll when mobile sidebar is open */
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  /* Ensure mobile sidebar overlay works properly */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+  }
+
+  /* Mobile sidebar container */
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 18rem;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+  }
+
+  .mobile-sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Ensure main content doesn't shift on mobile */
+  @media (max-width: 768px) {
+    .main-content {
+      width: 100%;
+      margin-left: 0;
+    }
   }
 }
 
