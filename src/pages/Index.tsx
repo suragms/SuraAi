@@ -36,6 +36,19 @@ const Index = () => {
     setIsInitialized(true);
   }, [isMobile]);
 
+  // Auto-create a fresh chat on first load for mobile users
+  useEffect(() => {
+    if (isInitialized && isMobile && currentChatId === '1' && chats.length === 1) {
+      const newChat: Chat = {
+        id: Date.now().toString(),
+        title: 'New Chat',
+        timestamp: new Date(),
+      };
+      setChats([newChat, ...chats]);
+      setCurrentChatId(newChat.id);
+    }
+  }, [isInitialized, isMobile]);
+
   // Manage body scroll when mobile sidebar is open
   useEffect(() => {
     if (isMobile && sidebarOpen) {
